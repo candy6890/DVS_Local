@@ -9,15 +9,18 @@ using System.Windows.Forms;
 using System.IO;
 using System.Data.SqlClient;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace DVS
 {
     public partial class Form2 : Form
     {
+
         string xNum = null;
         string connetionString = null, sql = null;
         string reHostName = null, reLocalName = null, xStr = null;
-        string DS = "211.75.132.163";
+        //string DS = "192.168.0.253";
+        string DS = "211.75.132.163"; gh
         string localDS = System.Net.Dns.GetHostEntry("LocalHost").HostName.ToString();
         string reHostNameNum = System.Net.Dns.GetHostEntry("LocalHost").HostName.Substring(4, 2);
         string reLocalNameNum = System.Net.Dns.GetHostEntry("LocalHost").HostName.Substring(7, 2);
@@ -41,7 +44,7 @@ namespace DVS
         void showDesk()
         {
             deskPannel.Location = new System.Drawing.Point(0, 22);
-            deskPannel.Size = new System.Drawing.Size(472, 246);
+            deskPannel.Size = new System.Drawing.Size(472, 397);
         }
 
         void showLocalName(string xKey)
@@ -79,7 +82,7 @@ namespace DVS
                 comboBox1.Text = label4.Text.Substring(0, 2);
                 comboBox2.Text = label4.Text.Substring(3, 2);
                 comboBox3.Text = label4.Text.Substring(6, 2);
-                this.Text = "三元及第視訊補課伺服器 V1.1 " + reLocalName;
+                this.Text = "三元及第視訊補課伺服器 V2.1 " + reLocalName;
             }
             rd.Close();
             cmd.Dispose();
@@ -217,6 +220,14 @@ namespace DVS
         {
             manualSetPannel.Visible = true;
             autoSetPannel.Visible = false;
+            selpanel1.Visible = true;
+            selpanel2.Visible = true;
+            selpanel4.Visible = true;
+            showCBa();
+            showCBb();
+            showCBc();
+
+
             //manualSetLabelinfo01.Text = System.DateTime.Now.AddDays(-15).ToString("yyyy/MM/dd") + " ~ " + System.DateTime.Now.ToString("yyyy/MM/dd");
         }
 
@@ -1508,6 +1519,9 @@ namespace DVS
                 string xePID = rd["PID"].ToString();
                 string xeBirthDate = rd["BirthDate"].ToString();
                 string xeTel = rd["Tel1"].ToString();
+
+                //string rxeName = Regex.Replace(xeName, @"[\W-]+", " ");
+
                 insertStu(xeOID, xeBranchID, xeYear, xeID, xeName, xeClassID, xeSeqNo, xePID, xeBirthDate, xeTel);
             }
             rd.Close();
@@ -1520,7 +1534,7 @@ namespace DVS
             connetionString = "Data Source=" + localDS + ";Initial Catalog=sourceData;User ID=sa;Password=";
             conn = new SqlConnection(connetionString);
             conn.Open();
-            sql = "Insert into Local_Stu_Data(serial, xBranchID, xYear, xID, xName,xClassID, xSeqNo, xPID, xBirthDate, xTel) VALUES (";
+            sql = "Insert into Local_Stu_Data(serial, xBranchID, xYear, xID, xName, xClassID, xSeqNo, xPID, xBirthDate, xTel) VALUES (";
             sql += "'" + xKey + "', ";
             sql += "'" + xKey2 + "', ";
             sql += "'" + xKey3 + "', ";
@@ -1552,6 +1566,18 @@ namespace DVS
             cmd.Dispose();
             conn.Close();
         }
+        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            manualRun01.Text = "查詢";
+        }
+        private void comboBox6_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            manualRun02.Text = "查詢";
+        }
+        private void comboBox7_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            manualRun03.Text = "查詢";
+        }
 
         private void manualRun_Click(object sender, EventArgs e)
         {
@@ -1559,45 +1585,221 @@ namespace DVS
             switch(bt.Name)
             {
                 case "manualRun01":
-                    DialogResult runResult01 = MessageBox.Show("你要選是還是否?", "手動匯入設定--重新匯入及刪除學生資料", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (runResult01 == DialogResult.Yes)
+                    Button bt01 = (Button)sender;
+                    switch (bt01.Text)
                     {
-                        //按了是
-                    }
-                    else if (runResult01 == DialogResult.No)
-                    {
-                        //按了否
+                        case "查詢":
+                            if (comboBox5.SelectedIndex.ToString() != "0")
+                            {
+                                xselectStu(comboBox5.SelectedItem.ToString());
+                                bt01.Text = "匯入";
+                            }
+                            break;
+                        case "匯入":
+                            if (comboBox5.SelectedIndex.ToString() != "0")
+                            {
+                                deleteStu_Data(comboBox5.SelectedItem.ToString());
+                                xselectStu_Data(comboBox5.SelectedItem.ToString());
+                                bt01.Text = "查詢";
+                            }
+                            break;
                     }
                     break;
                 case "manualRun02":
-                    DialogResult runResult02 = MessageBox.Show("你要選是還是否?", "顯示在彈出視窗上面的字", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    
+                    Button bt02 = (Button)sender;
+                    switch (bt02.Text)
+                    {
+                        case "查詢":
+                            if (comboBox6.SelectedIndex.ToString() != "0")
+                            {
+                                xselectStu(comboBox6.SelectedItem.ToString());
+                                bt02.Text = "匯入";
+                            }
+                            break;
+                        case "匯入":
+                            if (comboBox6.SelectedIndex.ToString() != "0")
+                            {
+                                deleteStu_Data(comboBox6.SelectedItem.ToString());
+                                xselectStu_Data(comboBox6.SelectedItem.ToString());
+                                bt02.Text = "查詢";
+                            }
+                            break;
+                    }
                     break;
                 case "manualRun03":
-                    DialogResult runResult03 = MessageBox.Show("你要選是還是否?", "顯示在彈出視窗上面的字", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    
-                    break;
-                case "manualRun04":
-                    DialogResult runResult04 = MessageBox.Show("此功能將會刪除今天補課資訊，請三思而後行?", "重新匯入及刪除補課資訊", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (runResult04 == DialogResult.Yes)
+                    Button bt03 = (Button)sender;
+                    switch (bt03.Text)
                     {
-                        copyDataPanel.Location = new System.Drawing.Point(0, 22);
-                        copyDataPanel.Size = new System.Drawing.Size(474, 270);
-                        copyDataPanel.Visible = true;
-                        copyDataLabel.Text = "正在傳輸資料請稍等.......";
-                        xActionLocal_SwapSeat("manual");
-                    }
-                    else if (runResult04 == DialogResult.No)
-                    {
-                        //按了否
+                        case "查詢":
+                            if (comboBox7.SelectedIndex.ToString() != "0")
+                            {
+                                xselectStu(comboBox7.SelectedItem.ToString());
+                                bt03.Text = "匯入";
+                            }
+                            break;
+                        case "匯入":
+                            if (comboBox7.SelectedIndex.ToString() != "0")
+                            {
+                                deleteStu_Data(comboBox7.SelectedItem.ToString());
+                                xselectStu_Data(comboBox7.SelectedItem.ToString());
+                                bt03.Text = "查詢";
+                            }
+                            break;
                     }
                     break;
             }
+        }
+
+        void showCBa()
+        {
+            string connetionString = null, sql = null;
+            SqlConnection conn; SqlCommand cmd; SqlDataReader rd;
+            comboBox5.Items.Clear();
+            comboBox5.Items.Add("請選擇");
+            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "SELECT DISTINCT RIGHT(Year,2) AS E1 ";
+            sql += "FROM Student ";
+            sql += "WHERE (Year >= '" + System.DateTime.Now.AddYears(-7).ToString() + "')  order by E1 desc ";             
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            while (rd.Read())
+            {
+                comboBox5.Items.Add(rd["E1"].ToString());
+            }
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+            comboBox5.SelectedIndex = 0;
+        }
+        void showCBb()
+        {
+            string connetionString = null, sql = null;
+            SqlConnection conn; SqlCommand cmd; SqlDataReader rd;
+            comboBox6.Items.Clear();
+            comboBox6.Items.Add("請選擇");
+            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "SELECT DISTINCT RIGHT(Year,2) AS E1 ";
+            sql += "FROM Student ";
+            sql += "WHERE (Year >= '" + System.DateTime.Now.AddYears(-7).ToString() + "')  order by E1 desc ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            while (rd.Read())
+            {
+                comboBox6.Items.Add(rd["E1"].ToString());
+            }
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+            comboBox6.SelectedIndex = 0;
+        }
+        void showCBc()
+        {
+            string connetionString = null, sql = null;
+            SqlConnection conn; SqlCommand cmd; SqlDataReader rd;
+            comboBox7.Items.Clear();
+            comboBox7.Items.Add("請選擇");
+            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "SELECT DISTINCT RIGHT(Year,2) AS E1 ";
+            sql += "FROM Student ";
+            sql += "WHERE (Year >= '" + System.DateTime.Now.AddYears(-7).ToString() + "')  order by E1 desc ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            while (rd.Read())
+            {
+                comboBox7.Items.Add(rd["E1"].ToString());
+            }
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+            comboBox7.SelectedIndex = 0;
         }
 
         private void autoSaveBt_Click(object sender, EventArgs e)
         {
 
         }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            if (copyDataLabel.Visible == true)
+            {
+                timer2.Stop();
+                copyDataPanel.Visible = false;
+                manualSetPannel.Visible = false;
+            }
+        }
+        void xselectStu(string xxYear)
+        {
+            SqlConnection conn; SqlCommand cmd; SqlDataReader rd;
+            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "SELECT COUNT(*) AS E1 FROM Student ";
+            sql += "WHERE (SUBSTRING(Year, 3, 2) = '" + xxYear + "' )";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            if (rd.Read())
+            {
+                label9.Text = rd["E1"].ToString();
+            }
+            rd.Close();
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+        }
+        void deleteStu_Data(string xKey)
+        {
+            SqlConnection conn; SqlCommand cmd; SqlDataReader rd;
+            connetionString = "Data Source=" + localDS + ";Initial Catalog=sourceData;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "delete from Local_Stu_Data ";
+            sql += "WHERE (SUBSTRING(xID, 1, 2) = '" + xKey + "')";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            rd.Read();
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+        }
+        void xselectStu_Data(string xKey)
+        {
+            SqlConnection conn; SqlCommand cmd; SqlDataReader rd;
+            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "SELECT * FROM Student ";
+            sql += "WHERE (SUBSTRING(ID, 1, 2) = '" + xKey + "') ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+	        int i = 0;
+            while (rd.Read())
+            {
+                i++;
+                string xeOID = rd["OID"].ToString();
+                string xeBranchID = rd["BranchID"].ToString();
+                string xeYear = rd["Year"].ToString();
+                string xeID = rd["ID"].ToString();
+                string xeName = rd["Name"].ToString();
+                string xeClassID = rd["ClassID"].ToString();
+                string xeSeqNo = rd["SeqNo"].ToString();
+                string xePID = rd["PID"].ToString();
+                string xeBirthDate = rd["BirthDate"].ToString();
+                string xeTel = rd["Tel1"].ToString();
+                string rxeName = Regex.Replace(xeName, @"[\W-]+", " ");
+                insertStu(xeOID, xeBranchID, xeYear, xeID, rxeName, xeClassID, xeSeqNo, xePID, xeBirthDate, xeTel);
+            }
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+            label5.Text = i.ToString();
+        }
+
     }
 }

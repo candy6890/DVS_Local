@@ -51,6 +51,16 @@
             this.autoSetLabel01 = new System.Windows.Forms.Label();
             this.deskPannel = new System.Windows.Forms.Panel();
             this.manualSetPannel = new System.Windows.Forms.Panel();
+            this.label31 = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
             this.selpanel2 = new System.Windows.Forms.Panel();
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
@@ -294,6 +304,16 @@
             // 
             this.manualSetPannel.BackColor = System.Drawing.Color.Khaki;
             this.manualSetPannel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.manualSetPannel.Controls.Add(this.label31);
+            this.manualSetPannel.Controls.Add(this.label30);
+            this.manualSetPannel.Controls.Add(this.label29);
+            this.manualSetPannel.Controls.Add(this.label28);
+            this.manualSetPannel.Controls.Add(this.label27);
+            this.manualSetPannel.Controls.Add(this.label20);
+            this.manualSetPannel.Controls.Add(this.label19);
+            this.manualSetPannel.Controls.Add(this.label18);
+            this.manualSetPannel.Controls.Add(this.label17);
+            this.manualSetPannel.Controls.Add(this.label16);
             this.manualSetPannel.Controls.Add(this.selpanel2);
             this.manualSetPannel.Controls.Add(this.selpanel1);
             this.manualSetPannel.Controls.Add(this.selpanel4);
@@ -304,9 +324,109 @@
             this.manualSetPannel.Controls.Add(this.manualSetLabel01);
             this.manualSetPannel.Location = new System.Drawing.Point(103, 29);
             this.manualSetPannel.Name = "manualSetPannel";
-            this.manualSetPannel.Size = new System.Drawing.Size(260, 359);
+            this.manualSetPannel.Size = new System.Drawing.Size(260, 365);
             this.manualSetPannel.TabIndex = 9;
             this.manualSetPannel.Visible = false;
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(3, 351);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(39, 12);
+            this.label31.TabIndex = 40;
+            this.label31.Text = "label31";
+            this.label31.Visible = false;
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(216, 323);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(39, 12);
+            this.label30.TabIndex = 39;
+            this.label30.Text = "label30";
+            this.label30.Visible = false;
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(173, 323);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(39, 12);
+            this.label29.TabIndex = 38;
+            this.label29.Text = "label29";
+            this.label29.Visible = false;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(47, 323);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(39, 12);
+            this.label28.TabIndex = 37;
+            this.label28.Text = "label28";
+            this.label28.Visible = false;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(3, 323);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(39, 12);
+            this.label27.TabIndex = 33;
+            this.label27.Text = "label27";
+            this.label27.Visible = false;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(179, 299);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(39, 12);
+            this.label20.TabIndex = 36;
+            this.label20.Text = "label20";
+            this.label20.Visible = false;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(135, 299);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(39, 12);
+            this.label19.TabIndex = 35;
+            this.label19.Text = "label19";
+            this.label19.Visible = false;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(91, 299);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(39, 12);
+            this.label18.TabIndex = 34;
+            this.label18.Text = "label18";
+            this.label18.Visible = false;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(47, 299);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(39, 12);
+            this.label17.TabIndex = 33;
+            this.label17.Text = "label17";
+            this.label17.Visible = false;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(3, 299);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(39, 12);
+            this.label16.TabIndex = 32;
+            this.label16.Text = "label16";
+            this.label16.Visible = false;
             // 
             // selpanel2
             // 
@@ -369,7 +489,7 @@
             this.manualRun02.Name = "manualRun02";
             this.manualRun02.Size = new System.Drawing.Size(44, 23);
             this.manualRun02.TabIndex = 22;
-            this.manualRun02.Text = "執行";
+            this.manualRun02.Text = "查詢";
             this.manualRun02.UseVisualStyleBackColor = false;
             this.manualRun02.Click += new System.EventHandler(this.manualRun_Click);
             // 
@@ -497,8 +617,9 @@
             this.manualRun03.Name = "manualRun03";
             this.manualRun03.Size = new System.Drawing.Size(44, 23);
             this.manualRun03.TabIndex = 25;
-            this.manualRun03.Text = "執行";
+            this.manualRun03.Text = "查詢";
             this.manualRun03.UseVisualStyleBackColor = false;
+            this.manualRun03.Click += new System.EventHandler(this.manualRun_Click);
             // 
             // label22
             // 
@@ -551,7 +672,7 @@
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(77, 12);
             this.label26.TabIndex = 8;
-            this.label26.Text = "學生資料年度";
+            this.label26.Text = "匯入預約記錄";
             // 
             // manualSetLabelStr04
             // 
@@ -584,7 +705,7 @@
             // 
             this.manualClosoe.BackColor = System.Drawing.SystemColors.Control;
             this.manualClosoe.ForeColor = System.Drawing.Color.Red;
-            this.manualClosoe.Location = new System.Drawing.Point(91, 318);
+            this.manualClosoe.Location = new System.Drawing.Point(92, 323);
             this.manualClosoe.Name = "manualClosoe";
             this.manualClosoe.Size = new System.Drawing.Size(75, 23);
             this.manualClosoe.TabIndex = 10;
@@ -711,5 +832,15 @@
         private System.Windows.Forms.Button manualRun01;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button manualRun03;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label27;
     }
 }

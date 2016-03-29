@@ -20,7 +20,7 @@ namespace DVS
         string connetionString = null, sql = null;
         string reHostName = null, reLocalName = null, xStr = null;
         //string DS = "192.168.0.253";
-        string DS = "211.75.132.163"; gh
+        string DS = "211.75.132.163"; 
         string localDS = System.Net.Dns.GetHostEntry("LocalHost").HostName.ToString();
         string reHostNameNum = System.Net.Dns.GetHostEntry("LocalHost").HostName.Substring(4, 2);
         string reLocalNameNum = System.Net.Dns.GetHostEntry("LocalHost").HostName.Substring(7, 2);
@@ -82,7 +82,7 @@ namespace DVS
                 comboBox1.Text = label4.Text.Substring(0, 2);
                 comboBox2.Text = label4.Text.Substring(3, 2);
                 comboBox3.Text = label4.Text.Substring(6, 2);
-                this.Text = "三元及第視訊補課伺服器 V2.1 " + reLocalName;
+                this.Text = "三元及第視訊補課伺服器 V1.2 " + reLocalName;
             }
             rd.Close();
             cmd.Dispose();
@@ -503,7 +503,7 @@ namespace DVS
             cmd.Dispose();
             conn.Close();
         }
-        void deleteDVD_video2()
+        void deleteDVD_video2(string xKey)
         {
             string connetionString = null, sql = null;
             SqlConnection conn; SqlCommand cmd; SqlDataReader rd;
@@ -512,6 +512,8 @@ namespace DVS
             conn = new SqlConnection(connetionString);
             conn.Open();
             sql = "delete from Local_dvd_video2 ";
+            sql += "where xDate = '" + System.DateTime.Now.ToShortDateString() + "' ";
+            sql += "and xPeriod = '" + xKey + "' ";
             cmd = new SqlCommand(sql, conn);
             rd = cmd.ExecuteReader();
             rd.Read();
@@ -760,6 +762,7 @@ namespace DVS
             if (rd.Read())
             {
                 updateLocal_SwapSeat(xKey, xKey2, xKey3, rd["xid"].ToString(), rd["xStatus"].ToString());
+                //updateLocal_SwapSeat("2016/3/24", "1,AM8:00~PM12:00", "027", "1552290025", "請假");
             }
             rd.Close();
             cmd.Dispose();
@@ -1519,10 +1522,10 @@ namespace DVS
                 string xePID = rd["PID"].ToString();
                 string xeBirthDate = rd["BirthDate"].ToString();
                 string xeTel = rd["Tel1"].ToString();
+                
+                string rxeName = Regex.Replace(xeName, @"[\W-]+", " ");
 
-                //string rxeName = Regex.Replace(xeName, @"[\W-]+", " ");
-
-                insertStu(xeOID, xeBranchID, xeYear, xeID, xeName, xeClassID, xeSeqNo, xePID, xeBirthDate, xeTel);
+                insertStu(xeOID, xeBranchID, xeYear, xeID, rxeName, xeClassID, xeSeqNo, xePID, xeBirthDate, xeTel);
             }
             rd.Close();
             cmd.Dispose();
@@ -1591,16 +1594,23 @@ namespace DVS
                         case "查詢":
                             if (comboBox5.SelectedIndex.ToString() != "0")
                             {
-                                xselectStu(comboBox5.SelectedItem.ToString());
+                                manualRun01.Enabled = false;
+                                xcselectStu(comboBox5.SelectedItem.ToString());
                                 bt01.Text = "匯入";
+                                manualRun01.Enabled = true;
                             }
                             break;
                         case "匯入":
                             if (comboBox5.SelectedIndex.ToString() != "0")
                             {
+                                manualRun01.Enabled = false;
                                 deleteStu_Data(comboBox5.SelectedItem.ToString());
                                 xselectStu_Data(comboBox5.SelectedItem.ToString());
+                                MessageBox.Show("匯入結果：" + label9.Text + @"/" + label5.Text);
                                 bt01.Text = "查詢";
+                                manualRun01.Enabled = true;
+                                label9.Text = "";
+                                label5.Text = "";
                             }
                             break;
                     }
@@ -1612,16 +1622,24 @@ namespace DVS
                         case "查詢":
                             if (comboBox6.SelectedIndex.ToString() != "0")
                             {
-                                xselectStu(comboBox6.SelectedItem.ToString());
+                                manualRun02.Enabled = false;
+                                xcselectClassCategory(comboBox6.SelectedItem.ToString());
                                 bt02.Text = "匯入";
+                                manualRun02.Enabled = true;
+
                             }
                             break;
                         case "匯入":
                             if (comboBox6.SelectedIndex.ToString() != "0")
                             {
-                                deleteStu_Data(comboBox6.SelectedItem.ToString());
-                                xselectStu_Data(comboBox6.SelectedItem.ToString());
+                                manualRun02.Enabled = false;
+                                xdeleteClassCategory(comboBox6.SelectedItem.ToString());
+                                xselectClassCategory(comboBox6.SelectedItem.ToString());
+                                MessageBox.Show("匯入結果：" + label14.Text + @"/" + label12.Text);
                                 bt02.Text = "查詢";
+                                manualRun02.Enabled = true;
+                                label14.Text = "";
+                                label12.Text = "";
                             }
                             break;
                     }
@@ -1633,16 +1651,24 @@ namespace DVS
                         case "查詢":
                             if (comboBox7.SelectedIndex.ToString() != "0")
                             {
-                                xselectStu(comboBox7.SelectedItem.ToString());
+                                manualRun03.Enabled = false;
+                                xcselectDVD_video2(comboBox7.SelectedItem.ToString());
                                 bt03.Text = "匯入";
+                                manualRun03.Enabled = true;
                             }
                             break;
                         case "匯入":
                             if (comboBox7.SelectedIndex.ToString() != "0")
                             {
-                                deleteStu_Data(comboBox7.SelectedItem.ToString());
-                                xselectStu_Data(comboBox7.SelectedItem.ToString());
+                                manualRun03.Enabled = false;
+                                deleteDVD_video2(comboBox7.SelectedItem.ToString());
+                                xselectDVD_video2(comboBox7.SelectedItem.ToString());                                
+                                MessageBox.Show("匯入結果：" + label24.Text + @"/" + label22.Text);
                                 bt03.Text = "查詢";
+                                manualRun03.Enabled = true;
+                                label24.Text = "";
+                                label22.Text = "";
+
                             }
                             break;
                     }
@@ -1656,12 +1682,12 @@ namespace DVS
             SqlConnection conn; SqlCommand cmd; SqlDataReader rd;
             comboBox5.Items.Clear();
             comboBox5.Items.Add("請選擇");
-            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            connetionString = "Data Source=" + localDS + ";Initial Catalog=sourceData;User ID=sa;Password=";
             conn = new SqlConnection(connetionString);
             conn.Open();
-            sql = "SELECT DISTINCT RIGHT(Year,2) AS E1 ";
-            sql += "FROM Student ";
-            sql += "WHERE (Year >= '" + System.DateTime.Now.AddYears(-7).ToString() + "')  order by E1 desc ";             
+            sql = "SELECT DISTINCT RIGHT(xYear,2) AS E1 ";
+            sql += "FROM Local_Stu_Data ";
+            sql += "WHERE (xYear >= '" + System.DateTime.Now.AddYears(-7).ToString() + "')  order by E1 desc ";
             cmd = new SqlCommand(sql, conn);
             rd = cmd.ExecuteReader();
             while (rd.Read())
@@ -1679,12 +1705,12 @@ namespace DVS
             SqlConnection conn; SqlCommand cmd; SqlDataReader rd;
             comboBox6.Items.Clear();
             comboBox6.Items.Add("請選擇");
-            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            connetionString = "Data Source=" + localDS + ";Initial Catalog=sourceData;User ID=sa;Password=";
             conn = new SqlConnection(connetionString);
             conn.Open();
-            sql = "SELECT DISTINCT RIGHT(Year,2) AS E1 ";
-            sql += "FROM Student ";
-            sql += "WHERE (Year >= '" + System.DateTime.Now.AddYears(-7).ToString() + "')  order by E1 desc ";
+            sql = "SELECT DISTINCT RIGHT(xYear,2) AS E1 ";
+            sql += "FROM Local_Stu_Data ";
+            sql += "WHERE (xYear >= '" + System.DateTime.Now.AddYears(-7).ToString() + "')  order by E1 desc ";
             cmd = new SqlCommand(sql, conn);
             rd = cmd.ExecuteReader();
             while (rd.Read())
@@ -1699,20 +1725,37 @@ namespace DVS
         void showCBc()
         {
             string connetionString = null, sql = null;
+            string WeekStr = null;
+            switch (System.DateTime.Now.DayOfWeek.ToString())
+            {
+                case "Monday": WeekStr = "1"; break;
+                case "Tuesday": WeekStr = "2"; break;
+                case "Wednesday": WeekStr = "3"; break;
+                case "Thursday": WeekStr = "4"; break;
+                case "Friday": WeekStr = "5"; break;
+                case "Saturday": WeekStr = "6"; break;
+                case "Sunday": WeekStr = "7"; break;
+            }
             SqlConnection conn; SqlCommand cmd; SqlDataReader rd;
             comboBox7.Items.Clear();
             comboBox7.Items.Add("請選擇");
-            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            connetionString = "Data Source=" + localDS + ";Initial Catalog=sourceData;User ID=sa;Password=";
             conn = new SqlConnection(connetionString);
             conn.Open();
-            sql = "SELECT DISTINCT RIGHT(Year,2) AS E1 ";
-            sql += "FROM Student ";
-            sql += "WHERE (Year >= '" + System.DateTime.Now.AddYears(-7).ToString() + "')  order by E1 desc ";
+            sql = "select xPeriod AS E1 from Local_dvd_video3  ";
+            sql += "where xHost = '" + reLocalNameNum + "' ";
+            sql += "and xWeek = '" + WeekStr + "' ";
             cmd = new SqlCommand(sql, conn);
             rd = cmd.ExecuteReader();
             while (rd.Read())
             {
-                comboBox7.Items.Add(rd["E1"].ToString());
+                if (rd["E1"].ToString().Substring(2, 1).ToString() != "不")
+                {
+                    if (rd["E1"].ToString().Substring(2, 1).ToString() != "請")
+                    {
+                        comboBox7.Items.Add(rd["E1"].ToString());
+                    }
+                }                
             }
             rd.Close();
             cmd.Dispose();
@@ -1734,14 +1777,17 @@ namespace DVS
                 manualSetPannel.Visible = false;
             }
         }
-        void xselectStu(string xxYear)
+
+        //Local_Stu_Data -----------------------------
+        void xcselectStu(string xxYear)
         {
             SqlConnection conn; SqlCommand cmd; SqlDataReader rd;
             connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
             conn = new SqlConnection(connetionString);
             conn.Open();
             sql = "SELECT COUNT(*) AS E1 FROM Student ";
-            sql += "WHERE (SUBSTRING(Year, 3, 2) = '" + xxYear + "' )";
+            sql += "WHERE (SUBSTRING(Year, 3, 2) = '" + xxYear + "' ) ";
+            sql += "AND (Status = '正常') ";
             cmd = new SqlCommand(sql, conn);
             rd = cmd.ExecuteReader();
             if (rd.Read())
@@ -1776,6 +1822,7 @@ namespace DVS
             conn.Open();
             sql = "SELECT * FROM Student ";
             sql += "WHERE (SUBSTRING(ID, 1, 2) = '" + xKey + "') ";
+            sql += "AND (Status = '正常')";
             cmd = new SqlCommand(sql, conn);
             rd = cmd.ExecuteReader();
 	        int i = 0;
@@ -1799,6 +1846,345 @@ namespace DVS
             cmd.Dispose();
             conn.Close();
             label5.Text = i.ToString();
+        }
+
+        //Local_Class -----------------------------
+        void xcselectClassCategory(string xKey)
+        {
+            int xCountClassCategory = 0;
+            int xCountClass = 0;
+            int xCountSubClass = 0;
+            int xCountSubject = 0;
+            int xCountParticipation = 0;
+
+            SqlConnection conn; SqlCommand cmd; SqlDataReader rd;
+            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "SELECT COUNT(*) AS E1 FROM ClassCategory ";
+            sql += "WHERE (SUBSTRING(Year, 3, 2) = '" + xKey + "') ";
+            sql += "AND (BranchID = '" + reLocalNameNum + "') ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            if (rd.Read())
+            {
+                label16.Text = rd["E1"].ToString();
+                xCountClassCategory = Convert.ToInt16(label16.Text);
+            }
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+
+            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "SELECT COUNT(*) AS E1 FROM Class ";
+            sql += "WHERE (SUBSTRING(Year, 3, 2) = '" + xKey + "') ";
+            sql += "AND (BranchID = '" + reLocalNameNum + "') ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            if (rd.Read())
+            {
+                label17.Text = rd["E1"].ToString();
+                xCountClass = Convert.ToInt32(label17.Text);
+            }
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+
+            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "SELECT COUNT(*) AS E1 FROM Subclass ";
+            sql += "WHERE (SUBSTRING(Year, 3, 2) = '" + xKey + "') ";
+            sql += "AND (BranchID = '" + reLocalNameNum + "') ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            if (rd.Read())
+            {
+                label18.Text = rd["E1"].ToString();
+                xCountSubClass = Convert.ToInt32(label18.Text);
+            }
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+
+            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "SELECT COUNT(*) AS E1 FROM Subject ";
+            sql += "WHERE (SUBSTRING(Year, 3, 2) = '" + xKey + "') ";
+            sql += "AND (BranchID = '" + reLocalNameNum + "') ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            if (rd.Read())
+            {
+                label19.Text = rd["E1"].ToString();
+                xCountSubject = Convert.ToInt32(label19.Text);
+            }
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+
+            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "SELECT COUNT(*) AS E1 FROM Participation ";
+            sql += "WHERE (SUBSTRING(Year, 3, 2) = '" + xKey + "') ";
+            sql += "AND (BranchID = '" + reLocalNameNum + "') ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            if (rd.Read())
+            {
+                label20.Text = rd["E1"].ToString();
+                xCountParticipation = Convert.ToInt32(label20.Text);
+                label14.Text = Convert.ToString(xCountClassCategory + xCountClass + xCountSubClass + xCountSubject + xCountParticipation);
+            }
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+        }
+
+        void xdeleteClassCategory(string xKey)
+        {
+            SqlConnection conn; SqlCommand cmd; SqlDataReader rd;
+            connetionString = "Data Source=" + localDS + ";Initial Catalog=sourceData;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "delete from Local_ClassCategory ";
+            sql += "where (SUBSTRING(xYear, 3, 2) = '" + xKey + "') ";
+            sql += "and (xHost = '" + reLocalNameNum + "') ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            rd.Read();
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+
+            connetionString = "Data Source=" + localDS + ";Initial Catalog=sourceData;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "delete from Local_Class ";
+            sql += "where (SUBSTRING(xYear, 3, 2) = '" + xKey + "') ";
+            sql += "and (xHost = '" + reLocalNameNum + "') ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            rd.Read();
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+
+            connetionString = "Data Source=" + localDS + ";Initial Catalog=sourceData;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "delete from Local_Subclass ";
+            sql += "where (SUBSTRING(xYear, 3, 2) = '" + xKey + "') ";
+            sql += "and (xHost = '" + reLocalNameNum + "') ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            rd.Read();
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+
+            connetionString = "Data Source=" + localDS + ";Initial Catalog=sourceData;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "delete from Local_Subject ";
+            sql += "where (SUBSTRING(xYear, 3, 2) = '" + xKey + "') ";
+            sql += "and (xHost = '" + reLocalNameNum + "') ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            rd.Read();
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+
+            connetionString = "Data Source=" + localDS + ";Initial Catalog=sourceData;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "delete from Local_Participation ";
+            sql += "where (SUBSTRING(xYear, 3, 2) = '" + xKey + "') ";
+            sql += "and (xHost = '" + reLocalNameNum + "') ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            rd.Read();
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+        }
+
+        void xselectClassCategory(string xKey)
+        {
+
+            SqlConnection conn; SqlCommand cmd; SqlDataReader rd;
+            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "SELECT * FROM ClassCategory ";
+            sql += "WHERE (SUBSTRING(Year, 3, 2) = '" + xKey + "') ";
+            sql += "AND (BranchID = '" + reLocalNameNum + "') ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            int i = 0;
+            while (rd.Read())
+            {
+                i++;
+                string xeOID = rd["OID"].ToString();
+                string xeBranchID = rd["BranchID"].ToString();
+                string xeYear = rd["Year"].ToString();
+                string xeName = rd["Name"].ToString();
+                insertClassCategory(xeOID, xeBranchID, xeYear, xeName);
+            }
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+
+            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "SELECT * FROM Class ";
+            sql += "WHERE (SUBSTRING(Year, 3, 2) = '" + xKey + "') ";
+            sql += "AND (BranchID = '" + reLocalNameNum + "') ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            int j = 0;
+            while (rd.Read())
+            {
+                j++;
+                string xeOID = rd["OID"].ToString();
+                string xeBranchID = rd["BranchID"].ToString();
+                string xeYear = rd["Year"].ToString();
+                string xeID = rd["ID"].ToString();
+                string xeName = rd["Name"].ToString();
+                string xeDeadline = rd["Deadline"].ToString();
+                string xeCategoryOID = rd["CategoryOID"].ToString();
+                insertClass(xeOID, xeBranchID, xeYear, xeID, xeName, xeDeadline, xeCategoryOID);
+            }
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+
+            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "SELECT * FROM Subclass ";
+            sql += "WHERE (SUBSTRING(Year, 3, 2) = '" + xKey + "') ";
+            sql += "AND (BranchID = '" + reLocalNameNum + "') ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            int k = 0;
+            while (rd.Read())
+            {
+                k++;
+                string xeOID = rd["OID"].ToString();
+                string xeBranchID = rd["BranchID"].ToString();
+                string xeYear = rd["Year"].ToString();
+                string xeName = rd["Name"].ToString();
+                string xeClassID = rd["ClassID"].ToString();
+                string xeDeadline = rd["Deadline"].ToString();
+                string xeSeqNo = rd["SeqNo"].ToString();
+                string xeClassOID = rd["ClassOID"].ToString();
+                insertSubclass(xeOID, xeBranchID, xeYear, xeName, xeClassID, xeDeadline, xeSeqNo, xeClassOID);
+            }
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+
+            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "SELECT * FROM Subject ";
+            sql += "WHERE (SUBSTRING(Year, 3, 2) = '" + xKey + "') ";
+            sql += "AND (BranchID = '" + reLocalNameNum + "') ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            int l = 0;
+            while (rd.Read())
+            {
+                l++;
+                string xeOID = rd["OID"].ToString();
+                string xeBranchID = rd["BranchID"].ToString();
+                string xeYear = rd["Year"].ToString();
+                string xeID = rd["ID"].ToString();
+                string xeName = rd["Name"].ToString();
+                insertSubject(xeOID, xeBranchID, xeYear, xeID, xeName);
+            }
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+
+            connetionString = "Data Source=" + DS + ";Initial Catalog=STMS;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "SELECT * FROM Participation ";
+            sql += "WHERE (SUBSTRING(Year, 3, 2) = '" + xKey + "') ";
+            sql += "AND (BranchID = '" + reLocalNameNum + "') ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            int m = 0;
+            while (rd.Read())
+            {
+                m++;
+                string xeOID = rd["OID"].ToString();
+                string xeBranchID = rd["BranchID"].ToString();
+                string xeYear = rd["Year"].ToString();
+                string xeStudentID = rd["StudentID"].ToString();
+                string xeSubjectID = rd["SubjectID"].ToString();
+                insertParticipation(xeOID, xeBranchID, xeYear, xeStudentID, xeSubjectID);
+            }
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+            label31.Text = m.ToString();
+            label12.Text = Convert.ToString(i + j + k + l + m);
+        }
+
+        //Local_DVD_video2 -----------------------------
+        void xcselectDVD_video2(string xKey)
+        {
+            string connetionString = null, sql = null;
+            SqlConnection conn; SqlCommand cmd; SqlDataReader rd;
+            connetionString = "Data Source=" + DS + ";Initial Catalog=DVD;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "select count(*) AS E1 from DVD_video2 ";
+            sql += "where 地點 = '" + reLocalNameNum + "' ";
+            sql += "AND 日期 = '" + System.DateTime.Now.ToShortDateString() + "' ";
+            sql += "AND 時段 = '" + xKey + "' ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            if (rd.Read())
+            {
+                label24.Text = rd["E1"].ToString();
+            }
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+        }
+        void xselectDVD_video2(string xKey)
+        {
+            string connetionString = null, sql = null;
+            SqlConnection conn; SqlCommand cmd; SqlDataReader rd;
+            connetionString = "Data Source=" + DS + ";Initial Catalog=DVD;User ID=sa;Password=";
+            conn = new SqlConnection(connetionString);
+            conn.Open();
+            sql = "select serial, id, 地點, 日期, 時段, 已看, 座位, xInTime, xOutTime from DVD_video2 ";
+            sql += "WHERE (地點 = '" + reLocalNameNum + "') ";
+            sql += "AND (日期 = '" + System.DateTime.Now.ToShortDateString() + "') ";
+            sql += "AND (時段 = '" + xKey + "') ";
+            cmd = new SqlCommand(sql, conn);
+            rd = cmd.ExecuteReader();
+            int i = 0;
+            while (rd.Read())
+            {
+                i++;
+                insertDVD_video2(Convert.ToInt32(rd["serial"].ToString()), rd["id"].ToString(), rd["地點"].ToString(), rd["日期"].ToString(), rd["時段"].ToString(), rd["已看"].ToString(), rd["座位"].ToString(), rd["xInTime"].ToString(), rd["xOutTime"].ToString());
+            }
+            rd.Close();
+            cmd.Dispose();
+            conn.Close();
+            label22.Text = i.ToString();
         }
 
     }
